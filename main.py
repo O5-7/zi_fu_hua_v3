@@ -5,7 +5,7 @@ import numpy as np
 from code_source import code_source
 from codes_style import codes_style
 from ndarrays_to_str import ndarrays_to_str
-from media_to_ndarray import media_to_ndarray
+from media_to_ndarray_iter import media_to_ndarray_iter
 
 code_source = code_source('xin_song_ti_16/code_sources_v3.txt', 'xin_song_ti_16/code_sources_v3_img_xinsongti_16.png', 16)
 for x, y in code_source.code_dict.items():
