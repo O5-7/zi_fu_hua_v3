@@ -1,29 +1,60 @@
 import numpy as np
 import cv2
-
 from PIL import Image
-from PIL import ImageSequence
+from collections.abc import Iterable
 
 
 class media_to_ndarray_iter:
+    """
+    将媒体文件读取为一个资源迭代器, 输出tuple(duration, shape, frame)
+    """
+
     def __init__(self, file: str):
         self.file_path = file
         self.file_type = 'unknown'
-        if file.endswith(('.jpg', '.png', '.tif', '.bmp')):
+        if file.endswith(('.jpg', '.png', '.tif', '.bmp', 'jfif')):
             self.file_type = 'image'
         if file.endswith('.gif'):
             self.file_type = 'gif'
         if file.endswith(('.mp4', '.avi', '.mov')):
             self.file_type = 'video'
 
-    def get_media_ndarray_iter(self) -> np.ndarray:
-        pass
+    def get_media_ndarray_iter(self) -> Iterable:
+        """
+        返回一个资源迭代器,输出 tuple(duration, shape, frame)
 
-    def image_to_ndarray_iter(self):
+        duration:float  单位ms
+
+        shape:tuple(int, int)  (h,w)
+
+        frame:np.ndarray
+
+        :return: collections.Iterable
+        """
+        iter_out = None
+        if self.file_type == 'image':
+            iter_out = self._image_to_ndarray_iter()
+        if self.file_type == 'gif':
+            iter_out = self._gif_to_ndarray_itery()
+        if self.file_type == 'video':
+            iter_out = self._video_to_ndarray_iter()
+        return iter_out
+
+    def _image_to_ndarray_iter(self) -> Iterable:
+        """
+        返回图片的资源迭代器,且duration=0
+
+        :return: collections.Iterable
+        """
         img = np.array(cv2.imread(self.file_path))
-        yield 0, img.shape, np.array(img)
+        yield 0, img.shape[:2], np.array(img)
 
-    def gif_to_ndarray_itery(self):
+    def _gif_to_ndarray_itery(self) -> Iterable:
+        """
+        返回gif的资源迭代器
+
+        :return: collections.Iterable
+        """
         gif = Image.open(self.file_path)
         shape = gif.size
         while True:
@@ -35,23 +66,32 @@ class media_to_ndarray_iter:
             except EOFError:
                 break
 
-    def video_to_ndarray_iter(self):
+    def _video_to_ndarray_iter(self) -> Iterable:
+        """
+        返回视频的资源迭代器
+
+        :return: collections.Iterable
+        """
         video = cv2.VideoCapture(self.file_path)
         video_w = int(video.get(cv2.CAP_PROP_FRAME_WIDTH))
         video_h = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT))
         video_fps = float(video.get(cv2.CAP_PROP_FPS))
         video_frame_count = int(video.get(cv2.CAP_PROP_FRAME_COUNT))
-        duration = 1 / video_fps
+        duration = 1000 / video_fps
         print(video_w, video_h, video_fps, video_frame_count)
 
         read_success = True
         frames = []
-        while video.isOpened() and read_success:
+        while video.isOpened():
             read_success, frame = video.read()
-            yield duration, (video_w, video_h), np.array(frame)
+            if not read_success: break
+            yield duration, (video_h, video_w), np.array(frame)
 
 
 if __name__ == '__main__':
-    mtn = media_to_ndarray_iter('./aya.mp4')
-    for x, y, z in mtn.video_to_ndarray_iter():
-        print(z.shape)
+    """
+    案例:
+    """
+    mtn = media_to_ndarray_iter('./Mitski.png')
+    for d, s, f in mtn.get_media_ndarray_iter():
+        print(d, s, f.shape)

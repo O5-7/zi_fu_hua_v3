@@ -5,7 +5,7 @@ from code_source import code_source
 from codes_style import codes_style
 from code_source import one_color_codes
 
-ti.init(arch=ti.cuda)
+ti.init()
 
 
 class ndarrays_to_str:
@@ -19,6 +19,13 @@ class ndarrays_to_str:
 
     # @ti.func
     def img_to_str(self, image: np.ndarray, style: codes_style):
+        """
+        将单帧图像按设定风格转换为字符串
+
+        :param image: 单帧图像
+        :param style: 字符风格
+        :return: 单帧字符串
+        """
         out_str = ''
         trans_func = self.gray_codes_no_reverse
         if style.color:
@@ -36,7 +43,6 @@ class ndarrays_to_str:
                 trans_func = self.gray_block()
         for line in image:
             for pix in line:
-
                 '''替换转换方法'''
                 out_str += self.color_block(pix)
 
