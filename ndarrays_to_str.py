@@ -9,48 +9,56 @@ ti.init()
 
 
 class ndarrays_to_str:
-    def __init__(self, media_ndarray: np.ndarray, code_source_obj: code_source):
+    """
+    将单张图像转换为str
+    """
+
+    def __init__(self, code_source_obj: code_source):
+        """
+        指定字符集生成转换器
+
+        :param code_source_obj: 字符集对象
+        """
         self.codes_dict: dict = code_source_obj.code_dict
-        self.is_colorful = media_ndarray.shape[-1] == 3
-        shape_len = len(media_ndarray.shape)
-        if self.is_colorful:
-            shape_len -= 1
-        self.type = 'image' if shape_len == 2 else 'gif_or_video'
+        self.is_colorful = True
 
     # @ti.func
     def img_to_str(self, image: np.ndarray, style: codes_style):
         """
         将单帧图像按设定风格转换为字符串
 
+        风格默认为灰色无反转字符
+
         :param image: 单帧图像
         :param style: 字符风格
         :return: 单帧字符串
         """
+        self.is_colorful = len(image.shape) == 3
         out_str = ''
-        trans_func = self.gray_codes_no_reverse
+        trans_func = self._gray_codes_no_reverse
         if style.color:
             if style.codes:
-                trans_func = self.color_codes
+                trans_func = self._color_codes
             else:
-                trans_func = self.color_block
+                trans_func = self._color_block
         else:
             if style.codes:
                 if style.reverse:
-                    trans_func = self.gray_codes_reverse
+                    trans_func = self._gray_codes_reverse
                 else:
-                    trans_func = self.gray_codes_no_reverse
+                    trans_func = self._gray_codes_no_reverse
             else:
-                trans_func = self.gray_block()
+                trans_func = self._gray_block()
         for line in image:
             for pix in line:
                 '''替换转换方法'''
-                out_str += self.color_block(pix)
+                out_str += trans_func(pix)
 
             out_str += '[0m\n'
         return out_str
 
     # @ti.func
-    def gray_codes_reverse(self, pix: np.ndarray) -> str:
+    def _gray_codes_reverse(self, pix: np.ndarray) -> str:
         out_str = ''
         if self.is_colorful:
             pix = int(np.average(pix))
@@ -70,7 +78,7 @@ class ndarrays_to_str:
         out_str += find_strs.codes[random.Random().randint(0, find_strs.codes_num - 1)]
         return out_str
 
-    def gray_block(self, pix: np.ndarray) -> str:
+    def _gray_block(self, pix: np.ndarray) -> str:
         out_str = ''
         if self.is_colorful:
             pix = int(np.average(pix))
@@ -78,7 +86,7 @@ class ndarrays_to_str:
         out_str = '[48;2;{0};{0};{0}m　'.format(pix)
         return out_str
 
-    def gray_codes_no_reverse(self, pix: np.ndarray) -> str:
+    def _gray_codes_no_reverse(self, pix: np.ndarray) -> str:
         out_str = '[38;2;255;255;255;48;2;0;0;0m'
         if self.is_colorful:
             pix = int(np.average(pix))
@@ -93,7 +101,7 @@ class ndarrays_to_str:
         out_str += find_strs.codes[random.Random().randint(0, find_strs.codes_num - 1)]
         return out_str
 
-    def color_block(self, pix: np.ndarray) -> str:
+    def _color_block(self, pix: np.ndarray) -> str:
         out_str = ''
         if self.is_colorful:
             out_str = '[48;2;{0};{1};{2}m　'.format(pix[0], pix[1], pix[2])
@@ -101,7 +109,7 @@ class ndarrays_to_str:
             out_str = '[48;2;{0};{0};{0}m　'.format(pix[0])
         return out_str
 
-    def color_codes(self, pix: np.ndarray) -> str:
+    def _color_codes(self, pix: np.ndarray) -> str:
         out_str = ''
         r = g = b = 0
         r_code = g_code = b_code = 0

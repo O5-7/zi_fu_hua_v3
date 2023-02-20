@@ -14,8 +14,7 @@ for x, y in code_source.code_dict.items():
 '''单张转换测试'''
 np.random.seed(0)
 img = np.random.randint(0, 255, (10, 10, 3), dtype=int)
-ndarrays_to_str = ndarrays_to_str(img, code_source)
-out = ndarrays_to_str.img_to_str(img, codes_style())
-with open('./out_test.txt', encoding='gbk',mode='a') as f:
-    f.write(out)
+
+ndarrays_to_str = ndarrays_to_str(code_source)
+out = ndarrays_to_str.img_to_str(img, codes_style(reverse=True, color=True, codes=False))
 print(out)

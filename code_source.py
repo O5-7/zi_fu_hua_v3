@@ -11,13 +11,16 @@ class one_color_codes:
 
 
 class code_source:
-    def __init__(self, code_source_str: str, code_source_img: str, font_size: int):
+    def __init__(self, code_source_str: str, code_source_img: str, font_size: int, font_type: str):
         """
         gbk字符集对象,通过原字符文件字符截图字体大小,获取
         :param code_source_str: txt文件地址
         :param code_source_img: img文件地址
         :param font_size: 字体大小
+        :param font_type: 字体名称
         """
+        self.font_size = font_size
+        self.font_type = font_type
         # 读取 codes文件
         code_source_file = open(code_source_str)
         codes_str_list = list(code_source_file.readline())
@@ -49,4 +52,8 @@ class code_source:
 
 
 if __name__ == "__main__":
-    code_source('code_sources_v3.txt', 'code_sources_v3_img_xinsongti_16.png', 16)
+    code_source('./xin_song_ti_16/code_sources_v3.txt',
+                './xin_song_ti_16/code_sources_v3_img_xinsongti_16.png',
+                16,
+                '新宋体'
+                )
