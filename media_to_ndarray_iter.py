@@ -63,7 +63,7 @@ class media_to_ndarray_iter:
         :return: collections.Iterable
         """
         img = np.array(cv2.imread(self.file_path))
-        yield 0, np.array(img)
+        yield 0, img[:, :, [2, 1, 0]]
 
     def _gif_to_ndarray_itery(self) -> Iterable:
         """

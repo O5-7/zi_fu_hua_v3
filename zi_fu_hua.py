@@ -26,8 +26,8 @@ class zi_fu_hua:
             out_file.write('font_type={}\n'.format(self.code_source.font_type))
             out_file.write('font_size={}\n'.format(self.code_source.font_size))
             out_file.write('str_size={},{}\n'.format(
-                int(shape[0] / self.pix_size),
-                int(shape[1] / self.pix_size)
+                int(shape[1] / self.pix_size),
+                int(shape[0] / self.pix_size)
             ))
 
             '''
@@ -37,12 +37,13 @@ class zi_fu_hua:
                 out_file.write('//new_frame\n')
                 f = cv2.resize(
                     f,
-                    (int(shape[0] / self.pix_size), int(shape[1] / self.pix_size)),
+                    (int(shape[1] / self.pix_size), int(shape[0] / self.pix_size)),
                     interpolation=cv2.INTER_AREA
                 )
                 frame_str = convert.img_to_str(f, self.codes_style)
                 out_file.write('duration' + str(d) + '\n')
                 out_file.write(frame_str)
+                print(frame_str)
 
 
 if __name__ == '__main__':
@@ -51,6 +52,6 @@ if __name__ == '__main__':
                               16,
                               '新宋体'
                               )
-    codes_style = codes_style()
-    zi_fu_hua = zi_fu_hua('./Mitski.png', code_source, codes_style)
+    codes_style = codes_style(color=True)
+    zi_fu_hua = zi_fu_hua('./fldl.gif', code_source, codes_style, pix_size=6)
     zi_fu_hua.generate_files()
