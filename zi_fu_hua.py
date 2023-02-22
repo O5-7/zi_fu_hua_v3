@@ -4,6 +4,7 @@ from media_to_ndarray_iter import media_to_ndarray_iter
 from ndarrays_to_str import ndarrays_to_str
 import cv2
 import os
+import time
 
 
 class zi_fu_hua:
@@ -33,17 +34,22 @@ class zi_fu_hua:
             '''
             写入 str_data
             '''
+            frame_count = 0
             for d, f in ndarrays_iter:
                 out_file.write('//new_frame\n')
+
                 f = cv2.resize(
                     f,
                     (int(shape[1] / self.pix_size), int(shape[0] / self.pix_size)),
                     interpolation=cv2.INTER_AREA
                 )
-                frame_str = convert.img_to_str(f, self.codes_style)
+                t_s = time.time()
+                frame_str = convert.img_to_str(f, (int(shape[0] / self.pix_size), int(shape[1] / self.pix_size)), self.codes_style)
+                print(time.time() - t_s)
                 out_file.write('duration' + str(d) + '\n')
                 out_file.write(frame_str)
-                print(frame_str)
+                frame_count += 1
+                print(frame_count)
 
 
 if __name__ == '__main__':
@@ -52,6 +58,6 @@ if __name__ == '__main__':
                               16,
                               '新宋体'
                               )
-    codes_style = codes_style(color=True)
-    zi_fu_hua = zi_fu_hua('./fldl.gif', code_source, codes_style, pix_size=6)
+    codes_style = codes_style()
+    zi_fu_hua = zi_fu_hua('./aya.mp4', code_source, codes_style)
     zi_fu_hua.generate_files()

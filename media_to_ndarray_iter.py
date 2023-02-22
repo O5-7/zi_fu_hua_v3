@@ -63,7 +63,10 @@ class media_to_ndarray_iter:
         :return: collections.Iterable
         """
         img = np.array(cv2.imread(self.file_path))
-        yield 0, img[:, :, [2, 1, 0]]
+        if len(img.shape) == 3:
+            yield 0, img[:, :, [2, 1, 0]]
+        else:
+            yield 0, img
 
     def _gif_to_ndarray_itery(self) -> Iterable:
         """
@@ -99,8 +102,9 @@ class media_to_ndarray_iter:
         frames = []
         while video.isOpened():
             read_success, frame = video.read()
-            if not read_success: break
-            yield duration, np.array(frame)
+            if not read_success:
+                break
+            yield duration, np.array(frame)[:, :, [2, 1, 0]]
 
 
 if __name__ == '__main__':

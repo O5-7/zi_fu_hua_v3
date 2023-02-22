@@ -42,13 +42,20 @@ class code_source:
         color_value_sorted = [average_color_list[i] for i in average_color_value_arg]
         # print(code_sorted, '\n', color_value_sorted, sep='')
         self.code_dict = dict()  # {color:codes_str}字典
+        self.color_dict = dict()
         for value in range(255):
             if value in color_value_sorted:
+                self.color_dict[value] = value
                 codes_in_one_color = ''
                 for i, code in list(enumerate(code_sorted)):
                     if color_value_sorted[i] == value:
                         codes_in_one_color += code
                 self.code_dict[value] = one_color_codes(codes_in_one_color, len(codes_in_one_color))
+            else:
+                new_value = self.color_dict[value-1]
+                while new_value not in color_value_sorted:
+                    new_value -= 1
+                self.color_dict[value] = new_value
 
 
 if __name__ == "__main__":
