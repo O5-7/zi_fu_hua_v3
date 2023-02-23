@@ -43,9 +43,7 @@ class zi_fu_hua:
                     (int(shape[1] / self.pix_size), int(shape[0] / self.pix_size)),
                     interpolation=cv2.INTER_AREA
                 )
-                t_s = time.time()
                 frame_str = convert.img_to_str(f, (int(shape[0] / self.pix_size), int(shape[1] / self.pix_size)), self.codes_style)
-                print(time.time() - t_s)
                 out_file.write('duration' + str(d) + '\n')
                 out_file.write(frame_str)
                 frame_count += 1
@@ -58,6 +56,6 @@ if __name__ == '__main__':
                               16,
                               '新宋体'
                               )
-    codes_style = codes_style()
-    zi_fu_hua = zi_fu_hua('./aya.mp4', code_source, codes_style)
+    codes_style = codes_style(color=True)
+    zi_fu_hua = zi_fu_hua('./aya.mp4', code_source, codes_style, pix_size=32)
     zi_fu_hua.generate_files()

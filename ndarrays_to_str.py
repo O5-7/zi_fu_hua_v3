@@ -1,6 +1,7 @@
 import time
 import numpy as np
 import random
+from threading import Thread
 from code_source import code_source
 from codes_style import codes_style
 from code_source import one_color_codes
@@ -46,26 +47,49 @@ class ndarrays_to_str:
         self._img_to_str_()
         return self.out_str
 
+    def _img_to_str_old_(self):
+        """
+        将单帧图像按设定风格转换为字符串
+
+        风格默认为灰色无反转字符
+
+        速度过慢已启用
+        """
+        t_s = time.time()
+        for x in range(self.img_shape[0]):
+            for y in range(self.img_shape[1]):
+                self.out_str += self.trans_func(self.img[x, y])
+            self.out_str += '[0m\n'
+        print('merge', time.time() - t_s)
+
     def _img_to_str_(self):
         """
         将单帧图像按设定风格转换为字符串
 
         风格默认为灰色无反转字符
 
-        :return: 单帧字符串
+        将每行分配到不同线程
         """
-        "tichi kernel"
 
-        pix_str_ndarray = a = [['' for _ in range(self.img_shape[1])] for _ in range(self.img_shape[0])]
+        pix_str_ndarray = ['' for _ in range(self.img_shape[0])]
+        t_s = time.time()
         for x in range(self.img_shape[0]):
-            for y in range(self.img_shape[1]):
-                pix_str_ndarray[x][y] = self.trans_func(self.img[x, y])
-
+            Thread(target=self._line_pix_to_str, args=(x, pix_str_ndarray)).start()
         for x in range(self.img_shape[0]):
-            for y in range(self.img_shape[1]):
-                self.out_str += pix_str_ndarray[x][y]
-            self.out_str += '[0m\n'
+            self.out_str += pix_str_ndarray[x]
+        print('merge', '{} frame/s'.format(1 / (time.time() - t_s)))
 
+    def _line_pix_to_str(self, x, str_array):
+        """
+        多线程单行处理函数
+
+        :param x: 行数
+        :param str_array: 每行str储存list
+        """
+        line = ''
+        for y in range(self.img_shape[1]):
+            line += self.trans_func(self.img[x, y])
+        str_array[x] = line + '[0m\n'
 
     def _gray_codes_reverse(self, pix: np.ndarray) -> str:
         out_str = ''
@@ -157,14 +181,7 @@ if __name__ == '__main__':
                               '新宋体'
                               )
     convert = ndarrays_to_str(code_source)
-    im_shape = (10, 10, 3)
-    img = np.random.randint(0, 255, size=im_shape)
-    t_s = time.time()
-    a = convert.img_to_str(img, im_shape, codes_style(reverse=True, color=True))
-    print(time.time() - t_s)
-    t_s = time.time()
-    b = convert.img_to_str(img, im_shape, codes_style(codes=False, color=True))
-    print(time.time() - t_s)
-    print(a)
-    print(b)
-
+    im_shape = (120, 67, 3)
+    img = np.random.randint(0, 100, size=im_shape)
+    a = convert.img_to_str(img, im_shape, codes_style(color=True))
+    b = convert.img_to_str(img, im_shape, codes_style(color=True, codes=False))
