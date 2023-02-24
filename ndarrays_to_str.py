@@ -77,7 +77,7 @@ class ndarrays_to_str:
             Thread(target=self._line_pix_to_str, args=(x, pix_str_ndarray)).start()
         for x in range(self.img_shape[0]):
             self.out_str += pix_str_ndarray[x]
-        print('merge', '{} frame/s'.format(1 / (time.time() - t_s)))
+        print('merge', '{} frame/s'.format(round(1 / (time.time() - t_s), 1)))
 
     def _line_pix_to_str(self, x, str_array):
         """

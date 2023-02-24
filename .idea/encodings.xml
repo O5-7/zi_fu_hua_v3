@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/code_source.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/codes_style.py" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/fldl/result.zfh" charset="GBK" />
     <file url="file://$PROJECT_DIR$/main.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/media_to_ndarray_iter.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ndarrays_to_str.py" charset="UTF-8" />

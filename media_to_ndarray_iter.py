@@ -99,9 +99,11 @@ class media_to_ndarray_iter:
         # print(video_w, video_h, video_fps, video_frame_count)
 
         read_success = True
-        frames = []
+        frame_read = 0
         while video.isOpened():
+            frame_read += 1
             read_success, frame = video.read()
+            print('rate={}%'.format(round(frame_read * 100 / video_frame_count, 2)), end='   ')
             if not read_success:
                 break
             yield duration, np.array(frame)[:, :, [2, 1, 0]]
