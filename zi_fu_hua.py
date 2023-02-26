@@ -30,7 +30,17 @@ class zi_fu_hua:
         if self.pix_size == -1:
             self.pix_size = codes.font_size
 
-    def generate_files(self, path: str = '.', loop_play: bool = False):
+    def generate_files(self, path: str = '.', audio_vol: float = 0.3, loop_play: bool = False):
+        """
+        输出zfh和wav文件(只有视频会输出wav文件)
+
+        输出文件会在指定目录下的以输入媒体文件名为名的文件夹里
+
+        :param audio_vol: 音量
+        :param path: 输出目录
+        :param loop_play: 是否循环播放
+        :return:
+        """
         media = media_to_ndarray_iter(self.file_path)
         shape, ndarrays_iter = media.get_media_ndarray_iter()
         print(media.file_type)
@@ -38,8 +48,8 @@ class zi_fu_hua:
         if not os.path.exists(os.path.join(path, self.file_name)):
             os.makedirs(os.path.join(path, self.file_name))
         with open(os.path.join(path, '{}\\result.zfh'.format(self.file_name)), mode='w') as out_file:
-            '''写入 mata_data'''
-            out_file.write('//mata_data\n')
+            '''写入 meta_data'''
+            out_file.write('//meta_data\n')
             out_file.write('version=zi_fi_hua_v3\n')
             out_file.write('github=github.com/O5-7/pix_player_v3\n')
             out_file.write('media_name={}\n'.format(self.file_name))
@@ -51,12 +61,15 @@ class zi_fu_hua:
             ))
             out_file.write('loop_play={}\n'.format(loop_play))
             if media.file_type == 'video':
+                """ 导出音频 """
                 video = moviepy.editor.VideoFileClip(self.file_path)
                 audio = video.audio
+                audio = audio.volumex([audio_vol] * 2)
                 audio.write_audiofile(os.path.join(path, '{}\\result.wav'.format(self.file_name)))
                 out_file.write('audio={}\n'.format(True))
             else:
                 out_file.write('audio={}\n'.format(False))
+            out_file.write("END_META_DATA\n")
 
             '''
             写入 str_data
@@ -81,6 +94,6 @@ if __name__ == '__main__':
                               16,
                               '新宋体'
                               )
-    codes_style = codes_style(color=True)
-    zi_fu_hua = zi_fu_hua('./aya.mp4', code_source, codes_style, pix_size=64)
-    zi_fu_hua.generate_files()
+    codes_style = codes_style(color=True, codes=False)
+    zi_fu_hua = zi_fu_hua('./Mitski.png', code_source, codes_style, pix_size=12)
+    zi_fu_hua.generate_files(loop_play=True)
