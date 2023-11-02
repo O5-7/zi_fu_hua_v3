@@ -1,7 +1,7 @@
 import time
 import numpy as np
 import random
-from threading import Thread
+# from threading import Thread
 from code_source import code_source
 from codes_style import codes_style
 from code_source import one_color_codes
@@ -43,7 +43,7 @@ class ndarrays_to_str:
                     self.trans_func = self._gray_codes_no_reverse
             else:
                 self.trans_func = self._gray_block
-        self.out_str = ''
+        self.out_str = '[38;2;255;255;255;48;2;0;0;0m'
         self._img_to_str_()
         return self.out_str
 
@@ -60,7 +60,7 @@ class ndarrays_to_str:
             for y in range(self.img_shape[1]):
                 self.out_str += self.trans_func(self.img[x, y])
             self.out_str += '[0m\n'
-        print('merge', time.time() - t_s)
+        # print('merge', time.time() - t_s)
 
     def _img_to_str_(self):
         """
@@ -74,10 +74,11 @@ class ndarrays_to_str:
         pix_str_ndarray = ['' for _ in range(self.img_shape[0])]
         t_s = time.time()
         for x in range(self.img_shape[0]):
-            Thread(target=self._line_pix_to_str, args=(x, pix_str_ndarray)).start()
+            self._line_pix_to_str(x, pix_str_ndarray)
+            # Thread(target=self._line_pix_to_str, args=(x, pix_str_ndarray)).start()
         for x in range(self.img_shape[0]):
             self.out_str += pix_str_ndarray[x]
-        print('merge', '{} frame/s'.format(round(1 / (time.time() - t_s), 1)))
+        # print('merge', '{} frame/s'.format(round(1 / (time.time() - t_s), 1)))
 
     def _line_pix_to_str(self, x, str_array):
         """
@@ -89,7 +90,8 @@ class ndarrays_to_str:
         line = ''
         for y in range(self.img_shape[1]):
             line += self.trans_func(self.img[x, y])
-        str_array[x] = line + '[0m\n'
+        # str_array[x] = line + '[0m\n'
+        str_array[x] = line + '\n'
 
     def _gray_codes_reverse(self, pix: np.ndarray) -> str:
         out_str = ''
@@ -115,13 +117,13 @@ class ndarrays_to_str:
         return out_str
 
     def _gray_codes_no_reverse(self, pix: np.ndarray) -> str:
-        out_str = '[38;2;255;255;255;48;2;0;0;0m'
+        out_str = ''
         if self.is_colorful:
             pix = int(np.average(pix))
         pix = int(pix / 2)
         pix = self.color_dict[pix]
         find_strs: one_color_codes = self.codes_dict[pix]
-        out_str += find_strs.codes[random.Random().randint(0, find_strs.codes_num - 1)]
+        out_str = find_strs.codes[random.Random().randint(0, find_strs.codes_num - 1)]
         return out_str
 
     def _color_block(self, pix: np.ndarray) -> str:

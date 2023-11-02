@@ -5,11 +5,12 @@
     <file url="file://$PROJECT_DIR$/code_source.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/codes_style.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/fldl/result.zfh" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/internet_yamero/result.zfh" charset="GBK" />
     <file url="file://$PROJECT_DIR$/main.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/media_to_ndarray_iter.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ndarrays_to_str.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/xin_song_ti_16/code_sources_v3.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zi_fu_hua.py" charset="UTF-8" />
-    <file url="PROJECT" charset="UTF-8" />
+    <file url="PROJECT" charset="GBK" />
   </component>
 </project>

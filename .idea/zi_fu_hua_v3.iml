@@ -5,6 +5,11 @@
       <excludeFolder url="file://$MODULE_DIR$/out_save" />
       <excludeFolder url="file://$MODULE_DIR$/fldl" />
       <excludeFolder url="file://$MODULE_DIR$/aya" />
+      <excludeFolder url="file://$MODULE_DIR$/Mitski" />
+      <excludeFolder url="file://$MODULE_DIR$/Bad_apple" />
+      <excludeFolder url="file://$MODULE_DIR$/Electronic_angel" />
+      <excludeFolder url="file://$MODULE_DIR$/judgelight" />
+      <excludeFolder url="file://$MODULE_DIR$/internet_yamero" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
