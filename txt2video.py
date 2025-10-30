@@ -12,10 +12,10 @@ class txt_to_video_from_media:
 
 
 class txt_to_video_from_zfh:
-    def __init__(self, file_path: str, out_path: str, code_source_: code_source, type: str):
+    def __init__(self, file_path: str, out_path: str, type: str):
         self.file_path = file_path
         self.out_path = out_path
-        self.code_source = code_source_
+
         self.type = type
         self.str_size: np.ndarray = None
         self.image_size: np.ndarray = None

@@ -237,6 +237,6 @@ if __name__ == '__main__':
                               )
     codes_style = codes_style(color=False, codes=True, reverse=True)
     # zi_fu_hua = zi_fu_hua(r'./fldl.gif', code_source, codes_style, pix_size=5, inter_type=cv2.INTER_NEAREST)
-    # zi_fu_hua = zi_fu_hua(r'e:/objects/videos/internet_yamero.mp4', code_source, codes_style, pix_size=26, inter_type=cv2.INTER_NEAREST)
-    zi_fu_hua = zi_fu_hua(r'./255test.mp4', code_source, codes_style, pix_size=16)
+    zi_fu_hua = zi_fu_hua(r"./きゅびびびびずむ.mp4", code_source, codes_style, pix_size=20, inter_type=cv2.INTER_AREA)
+    # zi_fu_hua = zi_fu_hua(r'./255test.mp4', code_source, codes_style, pix_size=16)
     zi_fu_hua.generate_files_mp(multi_process_num=8, loop_play=True)

@@ -12,6 +12,7 @@ class code_source:
     def __init__(self, code_source_str: str, code_source_img: str, font_size: int, font_type: str):
         """
         gbk字符集对象,通过原字符文件字符截图字体大小,获取
+
         :param code_source_str: txt文件地址
         :param code_source_img: img文件地址
         :param font_size: 字体大小
@@ -20,7 +21,7 @@ class code_source:
         self.font_size = font_size
         self.font_type = font_type
         # 读取 codes文件
-        code_source_file = open(code_source_str)
+        code_source_file = open(code_source_str,encoding='gbk')
         codes_str_list = list(code_source_file.readline())
         code_source_file.close()
         # 读取 img文件
@@ -57,8 +58,12 @@ class code_source:
 
 
 if __name__ == "__main__":
-    code_source('./xin_song_ti_16/code_sources_v3.txt',
+    a = code_source('./xin_song_ti_16/code_sources_v3.txt',
                 './xin_song_ti_16/code_sources_v3_img_xinsongti_16.png',
                 16,
                 '新宋体'
                 )
+
+    print(a.code_dict)
+    print(a.color_dict)
+
